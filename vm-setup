@@ -36,6 +36,10 @@ step "[+] Updating system package list..."
 sudo apt update 2>&1 | tee -a $LOG_FILE
 success "Package list updated."
 
+step "[+] Installing 1337 H4x0R Wallpapers..."
+sudo apt install kali-wallpapers-all -y
+success "Package list updated."
+
 step "[+] Installing tools: wordlists, seclists, feroxbuster, nmap, gobuster, python3-pip, tmux..."
 sudo apt install -y wordlists seclists feroxbuster nmap gobuster python3-pip tmux 2>&1 | tee -a $LOG_FILE
 success "Core tools installed."
