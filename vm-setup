@@ -1,0 +1,74 @@
+#!/bin/bash
+
+# ================================
+# Colors
+# ================================
+GREEN="\033[0;32m"
+YELLOW="\033[1;33m"
+RED="\033[0;31m"
+NC="\033[0m" # No Color
+
+# ================================
+# Log File
+# ================================
+LOG_FILE="setup.log"
+echo "==== VM Setup Log - $(date) ====" > $LOG_FILE
+
+log() {
+    echo -e "$1" | tee -a $LOG_FILE
+}
+
+# ================================
+# Start Setup
+# ================================
+
+log "${YELLOW}[+] Updating system...${NC}"
+sudo apt update && sudo apt upgrade -y >> $LOG_FILE 2>&1
+
+log "${YELLOW}[+] Installing core tools...${NC}"
+sudo apt install -y wordlists seclists feroxbuster nmap gobuster python3-pip tmux >> $LOG_FILE 2>&1
+
+log "${YELLOW}[+] Creating folder structure...${NC}"
+mkdir -p ~/tools ~/recon ~/loot ~/exploits ~/htb >> $LOG_FILE 2>&1
+
+log "${YELLOW}[+] Cloning PEASS-ng...${NC}"
+git clone https://github.com/carlospolop/PEASS-ng.git ~/tools/PEASS-ng >> $LOG_FILE 2>&1
+
+log "${YELLOW}[+] Linking PEAS scripts...${NC}"
+ln -sf ~/tools/PEASS-ng/linPEAS/linpeas.sh ~/tools/linpeas.sh
+ln -sf ~/tools/PEASS-ng/winPEAS/winPEAS.bat ~/tools/winpeas.bat
+
+log "${YELLOW}[+] Cloning Nishang...${NC}"
+git clone https://github.com/samratashok/nishang.git ~/tools/nishang >> $LOG_FILE 2>&1
+
+# ================================
+# Append Aliases to Shell Profiles
+# ================================
+
+ALIASES=$(cat << 'EOF'
+
+# ===== Custom Hacking Aliases =====
+alias gobust='sudo gobuster dir -w /usr/share/seclists/Discovery/Web-Content/raft-small-words.txt -o gobuster.out -b 404,403,301 -u'
+alias nnmap='sudo mkdir -p nmap && sudo nmap -sCV -vvv -oA nmap/script-scan && sleep 10 && sudo nmap -p- -T4 -A -oA nmap/full-port-scan'
+alias nnmap1='sudo mkdir -p nmap && sudo nmap -sCV -vvv -oA nmap/script-scan'
+alias nnmap2='sudo nmap -p- -T4 -A -oA nmap/full-port-scan'
+alias pyserv='python3 -m http.server'
+alias c='clear'
+alias mp='sudo mousepad'
+alias dirser='sudo dirsearch -w /usr/share/seclists/Discovery/Web-Content/raft-small-words.txt -o dirsearch.out -u'
+alias cphp='sudo cp /opt/Web-Shells/laudanum/php/php-reverse-shell.php .'
+alias psh='sudo cp ~/tools/nishang/Shells/Invoke-PowerShellTcpOneLine.ps1 .'
+alias nnc='rlwrap nc -nvlp'
+alias webshells-nishang='cd ~/tools/nishang/Shells'
+EOF
+)
+
+log "${YELLOW}[+] Adding custom aliases...${NC}"
+echo "$ALIASES" >> ~/.bashrc
+echo "$ALIASES" >> ~/.zshrc
+
+# ================================
+# Final Message
+# ================================
+
+log "${GREEN}[✔] Setup complete. You're locked and loaded.${NC}"
