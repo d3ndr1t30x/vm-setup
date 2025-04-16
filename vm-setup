@@ -45,7 +45,7 @@ sudo apt install terminator -y
 success "Terminator installed."
 
 step "[+] Installing tools: wordlists, seclists, feroxbuster, nmap, gobuster, python3-pip, tmux..."
-sudo apt install -y wordlists seclists feroxbuster nmap gobuster python3-pip tmux 2>&1 | tee -a $LOG_FILE
+sudo apt install -y wordlists seclists feroxbuster nmap rlwrap gobuster python3-pip tmux 2>&1 | tee -a $LOG_FILE
 success "Core tools installed."
 
 step "[+] Creating folder structure in home directory..."
