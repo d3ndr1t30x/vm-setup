@@ -38,7 +38,11 @@ success "Package list updated."
 
 step "[+] Installing 1337 H4x0R Wallpapers..."
 sudo apt install kali-wallpapers-all -y
-success "Package list updated."
+success "Kali wallpapers installed."
+
+step "[+] Terminator..."
+sudo apt install terminator -y
+success "Terminator installed."
 
 step "[+] Installing tools: wordlists, seclists, feroxbuster, nmap, gobuster, python3-pip, tmux..."
 sudo apt install -y wordlists seclists feroxbuster nmap gobuster python3-pip tmux 2>&1 | tee -a $LOG_FILE
