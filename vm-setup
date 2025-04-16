@@ -23,7 +23,7 @@ log() {
 # ================================
 
 log "${YELLOW}[+] Updating system...${NC}"
-sudo apt update && sudo apt upgrade -y >> $LOG_FILE 2>&1
+sudo apt update -y >> $LOG_FILE 2>&1
 
 log "${YELLOW}[+] Installing core tools...${NC}"
 sudo apt install -y wordlists seclists feroxbuster nmap gobuster python3-pip tmux >> $LOG_FILE 2>&1
