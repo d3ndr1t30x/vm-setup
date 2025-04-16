@@ -18,31 +18,51 @@ log() {
     echo -e "$1" | tee -a $LOG_FILE
 }
 
+step() {
+    echo -e "${YELLOW}$1${NC}"
+    echo "== $1 ==" >> $LOG_FILE
+}
+
+success() {
+    echo -e "${GREEN}    └── $1${NC}"
+    echo "    └── $1" >> $LOG_FILE
+}
+
 # ================================
 # Start Setup
 # ================================
 
-log "${YELLOW}[+] Updating system...${NC}"
-sudo apt update -y >> $LOG_FILE 2>&1
+step "[+] Updating system package list..."
+sudo apt update 2>&1 | tee -a $LOG_FILE
+success "Package list updated."
 
-log "${YELLOW}[+] Installing core tools...${NC}"
-sudo apt install -y wordlists seclists feroxbuster nmap gobuster python3-pip tmux >> $LOG_FILE 2>&1
+step "[+] Installing tools: wordlists, seclists, feroxbuster, nmap, gobuster, python3-pip, tmux..."
+sudo apt install -y wordlists seclists feroxbuster nmap gobuster python3-pip tmux 2>&1 | tee -a $LOG_FILE
+success "Core tools installed."
 
-log "${YELLOW}[+] Creating folder structure...${NC}"
-mkdir -p ~/tools ~/recon ~/loot ~/exploits ~/htb >> $LOG_FILE 2>&1
+step "[+] Creating folder structure in home directory..."
+mkdir -p ~/tools ~/recon ~/loot ~/exploits ~/htb 2>&1 | tee -a $LOG_FILE
+success "Folders created: tools, recon, loot, exploits, htb."
 
-log "${YELLOW}[+] Cloning PEASS-ng...${NC}"
-git clone https://github.com/carlospolop/PEASS-ng.git ~/tools/PEASS-ng >> $LOG_FILE 2>&1
+step "[+] Cloning PEASS-ng repository..."
+git clone https://github.com/carlospolop/PEASS-ng.git ~/tools/PEASS-ng 2>&1 | tee -a $LOG_FILE
+success "PEASS-ng cloned."
 
-log "${YELLOW}[+] Linking PEAS scripts...${NC}"
+step "[+] Creating symlinks for linpeas and winpeas..."
 ln -sf ~/tools/PEASS-ng/linPEAS/linpeas.sh ~/tools/linpeas.sh
 ln -sf ~/tools/PEASS-ng/winPEAS/winPEAS.bat ~/tools/winpeas.bat
+success "Symlinks created."
 
-log "${YELLOW}[+] Cloning Nishang...${NC}"
-git clone https://github.com/samratashok/nishang.git ~/tools/nishang >> $LOG_FILE 2>&1
+step "[+] Cloning Nishang repository..."
+git clone https://github.com/samratashok/nishang.git ~/tools/nishang 2>&1 | tee -a $LOG_FILE
+success "Nishang cloned."
+
+step "[+] Running updatedb to update file paths..."
+sudo updatedb -v 2>&1 | tee -a $LOG_FILE
+success "Paths updated."
 
 # ================================
-# Append Aliases to Shell Profiles
+# Aliases
 # ================================
 
 ALIASES=$(cat << 'EOF'
@@ -63,12 +83,16 @@ alias webshells-nishang='cd ~/tools/nishang/Shells'
 EOF
 )
 
-log "${YELLOW}[+] Adding custom aliases...${NC}"
-echo "$ALIASES" >> ~/.bashrc
-echo "$ALIASES" >> ~/.zshrc
+step "[+] Adding custom aliases to ~/.bashrc and ~/.zshrc..."
+echo "$ALIASES" >> ~/.bashrc && success "Aliases added to .bashrc."
+echo "$ALIASES" >> ~/.zshrc && success "Aliases added to .zshrc."
+
+step "[+] Sourcing updated .bashrc and .zshrc..."
+source ~/.bashrc && success ".bashrc sourced."
+source ~/.zshrc && success ".zshrc sourced."
 
 # ================================
 # Final Message
 # ================================
 
-log "${GREEN}[✔] Setup complete. You're locked and loaded.${NC}"
+log "${GREEN}[✔] Setup complete. Welcome to your new hacker home.${NC}"
