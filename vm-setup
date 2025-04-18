@@ -52,6 +52,19 @@ step "[+] Creating folder structure in home directory..."
 mkdir -p ~/tools ~/recon ~/loot ~/exploits ~/htb 2>&1 | tee -a $LOG_FILE
 success "Folders created: tools, recon, loot, exploits, htb."
 
+step "[+] Installing kerbrute..."
+curl -L -o kerbrute https://github.com/ropnop/kerbrute/releases/download/v1.0.3/kerbrute_linux_amd64 2>&1 | tee -a $LOG_FILE
+chmod +x kerbrute 2>&1 | tee -a $LOG_FILE
+sudo mv kerbrute /usr/bin/kerbrute 2>&1 | tee -a $LOG_FILE
+success "kerbrute installed and moved to /usr/bin."
+
+step "[+] Installing windapsearch..."
+curl -L -o windapsearch https://github.com/ropnop/go-windapsearch/releases/download/v0.3.0/windapsearch-linux-amd64 2>&1 | tee -a $LOG_FILE
+chmod +x windapsearch 2>&1 | tee -a $LOG_FILE
+sudo mv windapsearch /usr/bin/windapsearch 2>&1 | tee -a $LOG_FILE
+success "windapsearch installed and moved to /usr/bin."
+
+
 step "[+] Cloning PEASS-ng repository..."
 git clone https://github.com/carlospolop/PEASS-ng.git ~/tools/PEASS-ng 2>&1 | tee -a $LOG_FILE
 success "PEASS-ng cloned."
