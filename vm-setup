@@ -70,7 +70,7 @@ success "nmapAutomator repo cloned to /opt."
 
 step "[+] Making nmapAutomator executable and copying to /usr/bin..."
 sudo chmod +x /opt/nmapAutomator/nmapAutomator.sh 2>&1 | tee -a $LOG_FILE
-sudo cp /opt/nmapAutomator/nmapAutomator.sh /usr/bin/nmapAutomator 2>&1 | tee -a $LOG_FILE
+sudo cp /opt/nmapAutomator/nmapAutomator.sh /usr/bin/recon.sh 2>&1 | tee -a $LOG_FILE
 success "nmapAutomator installed to /usr/bin as 'nmapAutomator'."
 
 step "[+] Cloning PEASS-ng repository..."
