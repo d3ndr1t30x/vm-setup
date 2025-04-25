@@ -113,6 +113,7 @@ alias cphp='sudo cp /opt/Web-Shells/laudanum/php/php-reverse-shell.php .'
 alias psh='sudo cp ~/tools/nishang/Shells/Invoke-PowerShellTcpOneLine.ps1 .'
 alias nnc='rlwrap nc -nvlp'
 alias webshells-nishang='cd ~/tools/nishang/Shells'
+alias clone='sudo git clone'
 EOF
 )
 
