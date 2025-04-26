@@ -120,6 +120,7 @@ ALIASES_LIST=(
 "alias mp='sudo mousepad'"
 "alias hosts='sudo mousepad /etc/hosts'"
 "alias opt='cd /opt'"
+"alias linenum='sudo cp /opt/LinEnum/LinEnum.sh .'"
 "alias dl='cd /home/kali/Downloads'"
 "alias dirser='sudo dirsearch -w /usr/share/seclists/Discovery/Web-Content/raft-small-words.txt -o dirsearch.out -u'"
 "alias cphp='sudo cp /opt/Web-Shells/laudanum/php/php-reverse-shell.php .'"
