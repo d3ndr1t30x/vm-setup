@@ -73,6 +73,14 @@ sudo chmod +x /opt/nmapAutomator/nmapAutomator.sh 2>&1 | tee -a $LOG_FILE
 sudo cp /opt/nmapAutomator/nmapAutomator.sh /usr/bin/recon.sh 2>&1 | tee -a $LOG_FILE
 success "nmapAutomator installed to /usr/bin as 'nmapAutomator'."
 
+step "[+] Cloning LinEnum to /opt..."
+sudo git clone https://github.com/rebootuser/LinEnum /opt/LinEnum 2>&1 | tee -a $LOG_FILE
+success "LinEnum repo cloned to /opt."
+
+step "[+] Making LinEnum executable..."
+sudo chmod +x /opt/LinEnum/LinEnum.sh 2>&1 | tee -a $LOG_FILE
+success "LinEnum is now executable"
+
 step "[+] Cloning PEASS-ng repository..."
 git clone https://github.com/carlospolop/PEASS-ng.git ~/tools/PEASS-ng 2>&1 | tee -a $LOG_FILE
 success "PEASS-ng cloned."
