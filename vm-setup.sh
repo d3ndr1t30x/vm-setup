@@ -40,49 +40,49 @@ step "[+] Installing 1337 H4x0R Wallpapers..."
 sudo apt install kali-wallpapers-all -y
 success "Kali wallpapers installed."
 
-step "[+] Terminator..."
+step "[+] Installing Terminator..."
 sudo apt install terminator -y
 success "Terminator installed."
 
-step "[+] Installing tools: wordlists, seclists, feroxbuster, nmap, gobuster, python3-pip, tmux..."
+step "[+] Installing core tools..."
 sudo apt install -y wordlists seclists feroxbuster nmap rlwrap gobuster python3-pip tmux 2>&1 | tee -a $LOG_FILE
 success "Core tools installed."
 
-step "[+] Creating folder structure in home directory..."
+step "[+] Creating folder structure..."
 mkdir -p ~/tools ~/recon ~/loot ~/exploits ~/htb 2>&1 | tee -a $LOG_FILE
-success "Folders created: tools, recon, loot, exploits, htb."
+success "Folders created."
 
 step "[+] Installing kerbrute..."
 curl -L -o kerbrute https://github.com/ropnop/kerbrute/releases/download/v1.0.3/kerbrute_linux_amd64 2>&1 | tee -a $LOG_FILE
-chmod +x kerbrute 2>&1 | tee -a $LOG_FILE
-sudo mv kerbrute /usr/bin/kerbrute 2>&1 | tee -a $LOG_FILE
-success "kerbrute installed and moved to /usr/bin."
+chmod +x kerbrute
+sudo mv kerbrute /usr/bin/kerbrute
+success "kerbrute installed."
 
 step "[+] Installing windapsearch..."
 curl -L -o windapsearch https://github.com/ropnop/go-windapsearch/releases/download/v0.3.0/windapsearch-linux-amd64 2>&1 | tee -a $LOG_FILE
-chmod +x windapsearch 2>&1 | tee -a $LOG_FILE
-sudo mv windapsearch /usr/bin/windapsearch 2>&1 | tee -a $LOG_FILE
-success "windapsearch installed and moved to /usr/bin."
+chmod +x windapsearch
+sudo mv windapsearch /usr/bin/windapsearch
+success "windapsearch installed."
 
-step "[+] Cloning nmapAutomator to /opt..."
-sudo git clone https://github.com/21y4d/nmapAutomator /opt/nmapAutomator 2>&1 | tee -a $LOG_FILE
-success "nmapAutomator repo cloned to /opt."
+step "[+] Cloning nmapAutomator..."
+sudo git clone https://github.com/21y4d/nmapAutomator /opt/nmapAutomator
+success "nmapAutomator cloned."
 
-step "[+] Making nmapAutomator executable and copying to /usr/bin..."
-sudo chmod +x /opt/nmapAutomator/nmapAutomator.sh 2>&1 | tee -a $LOG_FILE
-sudo cp /opt/nmapAutomator/nmapAutomator.sh /usr/bin/recon.sh 2>&1 | tee -a $LOG_FILE
-success "nmapAutomator installed to /usr/bin as 'nmapAutomator'."
+step "[+] Installing nmapAutomator script to /usr/bin..."
+sudo chmod +x /opt/nmapAutomator/nmapAutomator.sh
+sudo cp /opt/nmapAutomator/nmapAutomator.sh /usr/bin/recon.sh
+success "nmapAutomator installed."
 
-step "[+] Cloning LinEnum to /opt..."
-sudo git clone https://github.com/rebootuser/LinEnum /opt/LinEnum 2>&1 | tee -a $LOG_FILE
-success "LinEnum repo cloned to /opt."
+step "[+] Cloning LinEnum..."
+sudo git clone https://github.com/rebootuser/LinEnum /opt/LinEnum
+success "LinEnum cloned."
 
 step "[+] Making LinEnum executable..."
-sudo chmod +x /opt/LinEnum/LinEnum.sh 2>&1 | tee -a $LOG_FILE
-success "LinEnum is now executable"
+sudo chmod +x /opt/LinEnum/LinEnum.sh
+success "LinEnum executable."
 
-step "[+] Cloning PEASS-ng repository..."
-git clone https://github.com/carlospolop/PEASS-ng.git ~/tools/PEASS-ng 2>&1 | tee -a $LOG_FILE
+step "[+] Cloning PEASS-ng..."
+git clone https://github.com/carlospolop/PEASS-ng.git ~/tools/PEASS-ng
 success "PEASS-ng cloned."
 
 step "[+] Creating symlinks for linpeas and winpeas..."
@@ -90,13 +90,13 @@ ln -sf ~/tools/PEASS-ng/linPEAS/linpeas.sh ~/tools/linpeas.sh
 ln -sf ~/tools/PEASS-ng/winPEAS/winPEAS.bat ~/tools/winpeas.bat
 success "Symlinks created."
 
-step "[+] Cloning Nishang repository..."
-git clone https://github.com/samratashok/nishang.git ~/tools/nishang 2>&1 | tee -a $LOG_FILE
+step "[+] Cloning Nishang..."
+git clone https://github.com/samratashok/nishang.git ~/tools/nishang
 success "Nishang cloned."
 
-step "[+] Running updatedb to update file paths..."
-sudo updatedb -v 2>&1 | tee -a $LOG_FILE
-success "Paths updated."
+step "[+] Updating file paths with updatedb..."
+sudo updatedb -v
+success "File paths updated."
 
 # ================================
 # Aliases (No Dupes)
@@ -105,7 +105,11 @@ success "Paths updated."
 add_alias_if_missing() {
     local file=$1
     local line=$2
-    grep -qxF "$line" "$file" || echo "$line" >> "$file"
+    if [ -f "$file" ]; then
+        grep -qxF "$line" "$file" || echo "$line" >> "$file"
+    else
+        echo "$line" >> "$file"
+    fi
 }
 
 ALIASES_LIST=(
@@ -130,18 +134,24 @@ ALIASES_LIST=(
 "alias clone='sudo git clone'"
 )
 
-step "[+] Adding custom aliases to ~/.bashrc and ~/.zshrc if they don't already exist..."
+step "[+] Adding aliases to ~/.bashrc and ~/.zshrc..."
 
 for alias_line in "${ALIASES_LIST[@]}"; do
     add_alias_if_missing ~/.bashrc "$alias_line"
     add_alias_if_missing ~/.zshrc "$alias_line"
 done
 
-success "Aliases added to .bashrc and .zshrc (no duplicates)."
+success "Aliases added (no duplicates)."
 
-step "[+] Sourcing updated .bashrc and .zshrc..."
-source ~/.bashrc && success ".bashrc sourced."
-source ~/.zshrc && success ".zshrc sourced."
+step "[+] Sourcing shells if present..."
+
+if [ -f ~/.bashrc ]; then
+    source ~/.bashrc && success ".bashrc sourced."
+fi
+
+if [ -f ~/.zshrc ]; then
+    source ~/.zshrc && success ".zshrc sourced."
+fi
 
 # ================================
 # Final Message
