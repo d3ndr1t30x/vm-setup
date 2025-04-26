@@ -99,36 +99,44 @@ sudo updatedb -v 2>&1 | tee -a $LOG_FILE
 success "Paths updated."
 
 # ================================
-# Aliases
+# Aliases (No Dupes)
 # ================================
 
-ALIASES=$(cat << 'EOF'
+add_alias_if_missing() {
+    local file=$1
+    local line=$2
+    grep -qxF "$line" "$file" || echo "$line" >> "$file"
+}
 
-# ===== Custom Hacking Aliases =====
-alias gobust='sudo gobuster dir -w /usr/share/seclists/Discovery/Web-Content/raft-small-words.txt -o gobuster.out -b 404,403,301 -u'
-alias nnmap='sudo mkdir -p nmap && sudo nmap -sCV -vvv -oA nmap/script-scan && sleep 10 && sudo nmap -p- -T4 -A -oA nmap/full-port-scan'
-alias nnmap1='sudo mkdir -p nmap && sudo nmap -sCV -vvv -oA nmap/script-scan'
-alias nnmap2='sudo nmap -p- -T4 -A -oA nmap/full-port-scan'
-alias pyserv='python3 -m http.server'
-alias c='clear'
-alias htb='cd /home/kali/htb'
-alias vpn='sudo openvpn /home/kali/Downloads/htb.ovpn'
-alias mp='sudo mousepad'
-alias hosts='sudo mousepad /etc/hosts'
-alias opt='cd /opt'
-alias dl='cd /home/kali/Downloads'
-alias dirser='sudo dirsearch -w /usr/share/seclists/Discovery/Web-Content/raft-small-words.txt -o dirsearch.out -u'
-alias cphp='sudo cp /opt/Web-Shells/laudanum/php/php-reverse-shell.php .'
-alias psh='sudo cp ~/tools/nishang/Shells/Invoke-PowerShellTcpOneLine.ps1 .'
-alias nnc='rlwrap nc -nvlp'
-alias webshells-nishang='cd ~/tools/nishang/Shells'
-alias clone='sudo git clone'
-EOF
+ALIASES_LIST=(
+"alias gobust='sudo gobuster dir -w /usr/share/seclists/Discovery/Web-Content/raft-small-words.txt -o gobuster.out -b 404,403,301 -u'"
+"alias nnmap='sudo mkdir -p nmap && sudo nmap -sCV -vvv -oA nmap/script-scan && sleep 10 && sudo nmap -p- -T4 -A -oA nmap/full-port-scan'"
+"alias nnmap1='sudo mkdir -p nmap && sudo nmap -sCV -vvv -oA nmap/script-scan'"
+"alias nnmap2='sudo nmap -p- -T4 -A -oA nmap/full-port-scan'"
+"alias pyserv='python3 -m http.server'"
+"alias c='clear'"
+"alias htb='cd /home/kali/htb'"
+"alias vpn='sudo openvpn /home/kali/Downloads/htb.ovpn'"
+"alias mp='sudo mousepad'"
+"alias hosts='sudo mousepad /etc/hosts'"
+"alias opt='cd /opt'"
+"alias dl='cd /home/kali/Downloads'"
+"alias dirser='sudo dirsearch -w /usr/share/seclists/Discovery/Web-Content/raft-small-words.txt -o dirsearch.out -u'"
+"alias cphp='sudo cp /opt/Web-Shells/laudanum/php/php-reverse-shell.php .'"
+"alias psh='sudo cp ~/tools/nishang/Shells/Invoke-PowerShellTcpOneLine.ps1 .'"
+"alias nnc='rlwrap nc -nvlp'"
+"alias webshells-nishang='cd ~/tools/nishang/Shells'"
+"alias clone='sudo git clone'"
 )
 
-step "[+] Adding custom aliases to ~/.bashrc and ~/.zshrc..."
-echo "$ALIASES" >> ~/.bashrc && success "Aliases added to .bashrc."
-echo "$ALIASES" >> ~/.zshrc && success "Aliases added to .zshrc."
+step "[+] Adding custom aliases to ~/.bashrc and ~/.zshrc if they don't already exist..."
+
+for alias_line in "${ALIASES_LIST[@]}"; do
+    add_alias_if_missing ~/.bashrc "$alias_line"
+    add_alias_if_missing ~/.zshrc "$alias_line"
+done
+
+success "Aliases added to .bashrc and .zshrc (no duplicates)."
 
 step "[+] Sourcing updated .bashrc and .zshrc..."
 source ~/.bashrc && success ".bashrc sourced."
@@ -137,5 +145,4 @@ source ~/.zshrc && success ".zshrc sourced."
 # ================================
 # Final Message
 # ================================
-
 log "${GREEN}[✔] Setup complete. Welcome to your new hacker home.${NC}"
