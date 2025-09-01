@@ -40,6 +40,14 @@ step "[+] Installing 1337 H4x0R Wallpapers..."
 sudo apt install -y kali-wallpapers-all 2>&1 | tee -a "$LOG_FILE"
 success "Kali wallpapers installed."
 
+step "[+] fastfetch..."
+sudo apt install -y kali-wallpapers-all 2>&1 | tee -a "$LOG_FILE"
+success "Fastfetch installed."
+
+step "[+] Installing Tmux..."
+sudo apt install -y tmux 2>&1 | tee -a "$LOG_FILE"
+success "Tmux installed."
+
 step "[+] Installing Terminator..."
 sudo apt install -y terminator 2>&1 | tee -a "$LOG_FILE"
 success "Terminator installed."
