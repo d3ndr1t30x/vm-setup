@@ -48,6 +48,10 @@ step "[+] Installing Tmux..."
 sudo apt install -y tmux 2>&1 | tee -a "$LOG_FILE"
 success "Tmux installed."
 
+step "[+] Installing smbclient..."
+sudo apt install -y smbclient 2>&1 | tee -a "$LOG_FILE"
+success "Smbclient installed."
+
 step "[+] Installing Terminator..."
 sudo apt install -y terminator 2>&1 | tee -a "$LOG_FILE"
 success "Terminator installed."
