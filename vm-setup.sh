@@ -53,7 +53,7 @@ sudo apt install -y smbclient 2>&1 | tee -a "$LOG_FILE"
 success "Smbclient installed."
 
 step "[+] Installing ldapsearch..."
-sudo apt install -y ldapsearch 2>&1 | tee -a "$LOG_FILE"
+sudo apt install -y ldap-utils 2>&1 | tee -a "$LOG_FILE"
 success "Ldapsearch installed."
 
 step "[+] Installing nikto..."
