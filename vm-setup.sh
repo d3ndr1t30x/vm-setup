@@ -48,6 +48,10 @@ step "[+] Installing Tmux..."
 sudo apt install -y tmux 2>&1 | tee -a "$LOG_FILE"
 success "Tmux installed."
 
+step "[+] Installing Impacket scripts..."
+sudo apt install -y impacket-scripts 2>&1 | tee -a "$LOG_FILE"
+success "Impacket scripts installed."
+
 step "[+] Installing DNSrecon..."
 sudo apt install -y dnsrecon 2>&1 | tee -a "$LOG_FILE"
 success "DNSrecon installed."
