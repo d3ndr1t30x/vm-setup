@@ -146,6 +146,11 @@ alias psh='cp ~/tools/nishang/Shells/Invoke-PowerShellTcpOneLine.ps1 .'
 alias nnc='rlwrap nc -nvlp'
 alias webshells-nishang='cd ~/tools/nishang/Shells'
 alias clone='sudo git clone'
+alias pentmux='tmux new-session -d -s pentest -n vpn \; \
+    new-window -n recon \; \
+    new-window -n kali \; \
+    attach-session -t pentest'
+
 EOF
 )
 
