@@ -64,6 +64,10 @@ step "[+] Installing ldapsearch..."
 sudo apt install -y ldap-utils 2>&1 | tee -a "$LOG_FILE"
 success "Ldapsearch installed."
 
+step "[+] Installing krb5-user..."
+sudo apt install -y krb5-user 2>&1 | tee -a "$LOG_FILE"
+success "krb5-user installed."
+
 step "[+] Installing nikto..."
 sudo apt install -y nikto 2>&1 | tee -a "$LOG_FILE"
 success "Nikto installed."
