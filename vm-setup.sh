@@ -1,4 +1,8 @@
 #!/bin/bash
+# ================================
+# Non-interactive APT (kill debconf prompts)
+# ================================
+export DEBIAN_FRONTEND=noninteractive
 
 # ================================
 # Colors
